@@ -1,0 +1,32 @@
+.near-payment-button {
+    display: block;
+    margin: auto;
+}
+
+.np-error {
+    color: #bc0b0b;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.np-sent {
+    display: block;
+    color: #056605;
+    text-align: center;
+}
+
+.np-logout {
+    display: none;
+    text-align: center;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 0 3px 3px 3px;
+}
+
+.np-logout.visible {
+    display: block;
+}
+
+.np-logout:hover {
+    text-decoration: underline;
+}
