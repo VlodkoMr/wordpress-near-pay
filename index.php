@@ -17,10 +17,10 @@ add_action('admin_menu', 'near_pay_setup_menu');
 
 function near_pay_setup_menu()
 {
-    add_menu_page('NEAR Pay', 'NEAR Pay', 'manage_options', 'near-pay', 'init');
+    add_menu_page('NEAR Pay', 'NEAR Pay', 'manage_options', 'near-pay', 'near_pay_init');
 }
 
-function init()
+function near_pay_init()
 {
     ?>
     <div class="wrap">
@@ -55,8 +55,8 @@ function init()
                     <td>
                         <fieldset>
                             <select name="network">
-                                <option value="test" <?=(esc_attr(get_option('network')) == 'test') ? "selected" : ""?>>TestNet</option>
-                                <option value="main" <?=(esc_attr(get_option('network')) == 'main') ? "selected" : ""?>>MainNet</option>
+                                <option value="test" <?php echo (esc_attr(get_option('network')) == 'test') ? "selected" : ""; ?>>TestNet</option>
+                                <option value="main" <?php echo (esc_attr(get_option('network')) == 'main') ? "selected" : ""; ?>>MainNet</option>
                             </select>
                             <label>
                             </label>
@@ -68,7 +68,7 @@ function init()
                     <td>
                         <fieldset>
                             <label>
-                                <input name="address" type="text" id="address" value="<?php echo esc_attr(get_option('address')) ?>" />
+                                <input name="address" type="text" id="address" value="<?php echo esc_attr(get_option('address')); ?>" />
                             </label>
                         </fieldset>
                     </td>
@@ -79,8 +79,8 @@ function init()
                         <fieldset>
                             <label>
                                 <select name="logout">
-                                    <option value="" <?=(esc_attr(get_option('logout')) == '') ? "selected" : ""?>>No</option>
-                                    <option value="yes" <?=(esc_attr(get_option('logout')) == 'yes') ? "selected" : ""?>>Yes</option>
+                                    <option value="" <?php echo (esc_attr(get_option('logout')) == '') ? "selected" : ""; ?>>No</option>
+                                    <option value="yes" <?php echo (esc_attr(get_option('logout')) == 'yes') ? "selected" : ""; ?>>Yes</option>
                                 </select>
                             </label>
                         </fieldset>
@@ -111,21 +111,21 @@ if (!is_admin() && !wp_is_json_request()) {
                 ?>
                 <a class="np-sent"
                    target="_blank"
-                   data-network="<?=esc_attr(get_option('network'))?>"
-                   data-transaction="<?=$_GET['transactionHashes']?>"
+                   data-network="<?php echo esc_attr(get_option('network')); ?>"
+                   data-transaction="<?php echo htmlspecialchars(urldecode($_GET['transactionHashes'])); ?>"
                 >Transaction sent, check in NEAR explorer.</a>
                 <?php
             } else {
                 if (!empty($_GET['errorMessage'])) {
-                    ?><p class="np-error"><?=urldecode($_GET['errorMessage'])?>.</p><?php
+                    ?><p class="np-error"><?php echo htmlspecialchars(urldecode($_GET['errorMessage'])); ?>.</p><?php
                 }
                 ?>
                 <button class="near-payment-button"
-                        data-amount="<?=$amount?>"
-                        data-text="<?=$text?>"
-                        data-login_text="<?=$loginText?>"
-                        data-address="<?=esc_attr(get_option('address'))?>"
-                        data-network="<?=esc_attr(get_option('network'))?>">...
+                        data-amount="<?php echo $amount; ?>"
+                        data-text="<?php echo $text; ?>"
+                        data-login_text="<?php echo $loginText; ?>"
+                        data-address="<?php echo esc_attr(get_option('address')); ?>"
+                        data-network="<?php echo esc_attr(get_option('network')); ?>">...
                 </button>
                 <?php
             }
@@ -144,14 +144,14 @@ if (!is_admin() && !wp_is_json_request()) {
 
 function near_pay_scripts_and_styles()
 {
-    wp_enqueue_style('near_pay-style', plugin_dir_url(__FILE__) . 'assets/css/near-pay.css', false, false, false);
-    wp_enqueue_script('near_pay-script', plugin_dir_url(__FILE__) . 'assets/js/near-pay.js', array('jquery'), false, false);
-    wp_enqueue_script('near_pay-api', 'https://cdn.jsdelivr.net/npm/near-api-js@0.41.0/dist/near-api-js.min.js', array('jquery'), '0.41.0', false);
+    wp_enqueue_style('near_pay-style', plugin_dir_url(__FILE__) . 'assets/css/near-pay.css', false);
+    wp_enqueue_script('near_pay-script', plugin_dir_url(__FILE__) . 'assets/js/near-pay.js', false);
+    wp_enqueue_script('near_pay-api', plugin_dir_url(__FILE__) . 'assets/js/near-api-js.min.js', false, '0.41.0');
 }
 
 function near_pay_admin_scripts_and_styles()
 {
-    wp_enqueue_style('near_pay-admin-style', plugin_dir_url(__FILE__) . 'assets/css/admin-near-pay.css', false, false, false);
+    wp_enqueue_style('near_pay-admin-style', plugin_dir_url(__FILE__) . 'assets/css/admin-near-pay.css', false);
 }
 
 add_action('wp_enqueue_scripts', 'near_pay_scripts_and_styles');
